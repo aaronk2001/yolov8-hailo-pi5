@@ -1,0 +1,17 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+hailort*.log
+*.bak
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.onnx
+*.pt
+# Model binary is not committed; see README "Get the model".
+*.hef
+.pytest_cache/
+.ruff_cache/
