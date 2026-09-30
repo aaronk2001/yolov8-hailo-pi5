@@ -1,0 +1,29 @@
+name: Bug report
+description: Something doesn't work on your Pi + Hailo setup
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: Command you ran, what you expected, what you got (paste the full error).
+    validations:
+      required: true
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      description: Output of the commands below.
+      render: text
+      value: |
+        cat /etc/os-release | head -2
+        python3 --version
+        hailortcli fw-control identify
+        sha256sum models/*.hef
+    validations:
+      required: true
+  - type: dropdown
+    id: source
+    attributes:
+      label: Camera / mode
+      options: [USB webcam, Pi CSI camera, single image, benchmark]

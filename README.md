@@ -149,21 +149,33 @@ first. The fix was one line. A regression test now pins it
 infer_image.py          single image -> annotated image
 infer_picamera2.py      live pipeline: camera -> Hailo-8 -> ByteTrack (CSI or USB)
 src/hailo_inference.py  HailoRT wrapper (configure, activate once, infer)
-src/utils/              NMS output decoder, box drawing, COCO labels
+src/utils/              NMS decoder, box drawing, ByteTrack adapter, COCO labels
 benchmarks/             run_benchmark.py and dated results
-tests/                  decoder and drawing tests (no NPU needed)
+tests/                  decoder, drawing and tracking tests (no NPU needed)
 docs/img/               sample input and outputs
 models/                 yolov8n.hef goes here (not committed)
 ```
 
 ## Tests
 
-The decode and draw path is pure NumPy/OpenCV, so it's tested without a Hailo device. CI runs
-`ruff` and `pytest` on every push.
+Everything after the NPU (NMS decoding, drawing, and the ByteTrack hand-off) is plain
+NumPy/OpenCV/`supervision`, so it's tested without a Hailo device. That includes the
+swapped-axes regression and ByteTrack keeping one ID on a moving object. CI runs `ruff` and
+`pytest` on every push.
 
 ```bash
-uv run --no-project --with numpy --with opencv-python-headless --with pytest pytest
+uv run --no-project --with numpy --with opencv-python-headless   --with "supervision==0.27.0.post2" --with pytest pytest
 ```
+
+## Troubleshooting
+
+| Symptom | Check |
+|---|---|
+| `ModuleNotFoundError: hailo_platform` | The venv must be created with `--system-site-packages`, because HailoRT's Python bindings come from apt. |
+| Creating the `VDevice` fails | Another process holds the NPU. Find it with `sudo lsof /dev/hailo0` and stop it. |
+| NPU not found at all | `hailortcli fw-control identify` should print the board and firmware version. If it doesn't, reseat the HAT and check the PCIe setup. |
+| The HEF won't load | Use a **Hailo-8** HEF (not Hailo-8L) built for your HailoRT version. |
+| `--source csi` finds no camera | `rpicam-hello --list-cameras` should list it. Otherwise check the ribbon cable. |
 
 ## Limitations
 

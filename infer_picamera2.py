@@ -5,13 +5,13 @@ import time
 from pathlib import Path
 
 import cv2
-import numpy as np
-from supervision import ByteTrack, Detections
+from supervision import ByteTrack
 
 sys.path.insert(0, str(Path(__file__).resolve().parent / 'src'))
 from hailo_inference import HailoInference  # noqa: E402
 from utils.draw import draw_detections  # noqa: E402
 from utils.postprocess import decode_yolov8  # noqa: E402
+from utils.tracking import to_sv_detections  # noqa: E402
 
 parser = argparse.ArgumentParser(description='Live camera -> Hailo-8 YOLOv8 -> ByteTrack pipeline.')
 parser.add_argument('--model', default='models/yolov8n.hef')
@@ -139,19 +139,8 @@ while running:
         continue
     last_seq, frame, dets = item
 
-    # Convert to supervision Detections for ByteTracker (bbox is normalized x0,y0,x1,y1)
-    if dets:
-        h, w = frame.shape[:2]
-        xyxy = np.array([
-            [d['bbox'][0]*w, d['bbox'][1]*h, d['bbox'][2]*w, d['bbox'][3]*h]
-            for d in dets
-        ], dtype=np.float32)
-        scores = np.array([d['score'] for d in dets], dtype=np.float32)
-        class_ids = np.array([d['class_id'] for d in dets], dtype=int)
-        sv_dets = Detections(xyxy=xyxy, confidence=scores, class_id=class_ids)
-        tracked = tracker.update_with_detections(sv_dets)
-    else:
-        tracked = tracker.update_with_detections(Detections.empty())
+    h, w = frame.shape[:2]
+    tracked = tracker.update_with_detections(to_sv_detections(dets, w, h))
 
     # Draw detections
     annotated = draw_detections(frame.copy(), dets)
