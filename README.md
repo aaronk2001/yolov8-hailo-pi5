@@ -2,15 +2,15 @@
 
 # yolov8-hailo-pi5
 
-**Real-time YOLOv8 object detection + ByteTrack tracking on a Raspberry Pi 5 with a Hailo-8 NPU.**
+**Real-time YOLOv8 object detection + ByteTrack tracking on a Raspberry Pi 5 with a Hailo-8L NPU.**
 
 [![CI](https://github.com/aaronk2001/yolov8-hailo-pi5/actions/workflows/ci.yml/badge.svg)](https://github.com/aaronk2001/yolov8-hailo-pi5/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Python 3.13](https://img.shields.io/badge/python-3.13-3776AB?logo=python&logoColor=white)
 ![Raspberry Pi 5](https://img.shields.io/badge/Raspberry%20Pi-5-C51A4A?logo=raspberrypi&logoColor=white)
-![Hailo-8](https://img.shields.io/badge/NPU-Hailo--8%20(26%20TOPS)-222)
+![Hailo-8L](https://img.shields.io/badge/NPU-Hailo--8L%20(13%20TOPS)-222)
 
-<img src="docs/img/hero.jpg" alt="YOLOv8n detections from the Hailo-8: four people and a bus" width="420">
+<img src="docs/img/hero.jpg" alt="YOLOv8n detections from the Hailo-8L: four people and a bus" width="420">
 
 **144.7 FPS** on the NPU · **6.9 ms** mean latency · **~300 lines** of Python
 
@@ -18,12 +18,12 @@
 
 ## Overview
 
-A small, readable Python pipeline that runs YOLOv8n on the Hailo-8 AI HAT+ attached to a
+A small, readable Python pipeline that runs YOLOv8n on the Hailo-8L AI HAT+ attached to a
 Raspberry Pi 5. Non-max suppression runs on the chip. Detections go through ByteTrack
 ([`supervision`](https://github.com/roboflow/supervision)), which gives each object an ID that
 persists across frames.
 
-- **Live mode:** Pi CSI camera or USB webcam → Hailo-8 → ByteTrack, with optional display and `.mp4` recording.
+- **Live mode:** Pi CSI camera or USB webcam → Hailo-8L → ByteTrack, with optional display and `.mp4` recording.
 - **Image mode:** run one image and save an annotated copy.
 - **Benchmark:** a reproducible synthetic-frame benchmark that writes a dated Markdown report.
 
@@ -35,7 +35,7 @@ Every number in this README was measured on real hardware. Untested features are
 | Part | Tested with |
 |---|---|
 | Board | Raspberry Pi 5, 16 GB |
-| NPU | Hailo-8 AI HAT+ (26 TOPS), PCIe |
+| NPU | Hailo-8L AI HAT+ (13 TOPS), PCIe |
 | OS | Debian 13.4 (Raspberry Pi OS, Trixie), aarch64 |
 | Runtime | HailoRT 4.23.0, Hailo firmware 4.23.0 |
 | Camera | UVC USB webcam at 640×480 (CSI path untested) |
@@ -54,9 +54,9 @@ uv pip install -r requirements.txt
 
 **2. Get the model**
 
-The compiled model isn't in the repo. Download the **YOLOv8n HEF for Hailo-8** (640×640,
+The compiled model isn't in the repo. Download the **YOLOv8n HEF for Hailo-8L** (640×640,
 on-chip NMS) from the
-[Hailo Model Zoo](https://github.com/hailo-ai/hailo_model_zoo/blob/master/docs/public_models/HAILO8/HAILO8_object_detection.rst).
+[Hailo Model Zoo](https://github.com/hailo-ai/hailo_model_zoo/blob/master/docs/public_models/HAILO8L/HAILO8L_object_detection.rst).
 Pick the version that matches your HailoRT, then save it as `models/yolov8n.hef`. The file
 tested here has this checksum:
 
@@ -102,7 +102,7 @@ python benchmarks/run_benchmark.py --label mine --out benchmarks/results-$(date 
 ```mermaid
 flowchart LR
     cam["<b>Camera thread</b><br/>CSI (picamera2) or USB (V4L2)"]
-    inf["<b>Inference thread</b><br/>resize 640×640 → Hailo-8<br/>YOLOv8n + on-chip NMS → decode"]
+    inf["<b>Inference thread</b><br/>resize 640×640 → Hailo-8L<br/>YOLOv8n + on-chip NMS → decode"]
     main["<b>Main thread</b><br/>ByteTrack → draw<br/>display / record"]
     cam -- "latest frame" --> inf -- "detections (new frames only)" --> main
 ```
@@ -147,7 +147,7 @@ first. The fix was one line. A regression test now pins it
 
 ```
 infer_image.py          single image -> annotated image
-infer_picamera2.py      live pipeline: camera -> Hailo-8 -> ByteTrack (CSI or USB)
+infer_picamera2.py      live pipeline: camera -> Hailo-8L -> ByteTrack (CSI or USB)
 src/hailo_inference.py  HailoRT wrapper (configure, activate once, infer)
 src/utils/              NMS decoder, box drawing, ByteTrack adapter, COCO labels
 benchmarks/             run_benchmark.py and dated results
@@ -174,7 +174,7 @@ uv run --no-project --with numpy --with opencv-python-headless   --with "supervi
 | `ModuleNotFoundError: hailo_platform` | The venv must be created with `--system-site-packages`, because HailoRT's Python bindings come from apt. |
 | Creating the `VDevice` fails | Another process holds the NPU. Find it with `sudo lsof /dev/hailo0` and stop it. |
 | NPU not found at all | `hailortcli fw-control identify` should print the board and firmware version. If it doesn't, reseat the HAT and check the PCIe setup. |
-| The HEF won't load | Use a **Hailo-8** HEF (not Hailo-8L) built for your HailoRT version. |
+| The HEF won't load | Use a **Hailo-8L** HEF (not Hailo-8) built for your HailoRT version. |
 | `--source csi` finds no camera | `rpicam-hello --list-cameras` should list it. Otherwise check the ribbon cable. |
 
 ## Limitations

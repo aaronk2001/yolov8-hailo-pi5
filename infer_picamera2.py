@@ -13,7 +13,7 @@ from utils.draw import draw_detections  # noqa: E402
 from utils.postprocess import decode_yolov8  # noqa: E402
 from utils.tracking import to_sv_detections  # noqa: E402
 
-parser = argparse.ArgumentParser(description='Live camera -> Hailo-8 YOLOv8 -> ByteTrack pipeline.')
+parser = argparse.ArgumentParser(description='Live camera -> Hailo-8L YOLOv8 -> ByteTrack pipeline.')
 parser.add_argument('--model', default='models/yolov8n.hef')
 parser.add_argument('--conf', type=float, default=0.4, help='confidence threshold')
 parser.add_argument('--source', choices=['auto', 'csi', 'usb'], default='auto',
@@ -170,7 +170,7 @@ while running:
         writer.write(annotated)
 
     if not args.headless:
-        cv2.imshow("YOLOv8n - Hailo-8", annotated)
+        cv2.imshow("YOLOv8n - Hailo-8L", annotated)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
