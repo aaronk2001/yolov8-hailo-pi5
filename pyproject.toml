@@ -1,6 +1,6 @@
 [project]
 name = "yolov8-hailo-pi5"
-version = "1.0.0"
+version = "1.0.1"
 description = "Real-time YOLOv8 object detection + ByteTrack on Raspberry Pi 5 with a Hailo-8L NPU"
 readme = "README.md"
 license = "MIT"
