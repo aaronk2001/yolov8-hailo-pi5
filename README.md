@@ -99,13 +99,10 @@ python benchmarks/run_benchmark.py --label mine --out benchmarks/results-$(date 
 
 ## How it works
 
-```mermaid
-flowchart LR
-    cam["<b>Camera thread</b><br/>CSI (picamera2) or USB (V4L2)"]
-    inf["<b>Inference thread</b><br/>resize 640×640 → Hailo-8L<br/>YOLOv8n + on-chip NMS → decode"]
-    main["<b>Main thread</b><br/>ByteTrack → draw<br/>display / record"]
-    cam -- "latest frame" --> inf -- "detections (new frames only)" --> main
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/frame-path-dark.png">
+  <img alt="Sequence diagram of one frame: the camera thread publishes to latest_frame, the inference thread runs the Hailo-8L (6.91 ms mean) and publishes to latest_result, and the main thread runs ByteTrack, draws and displays." src="docs/diagrams/frame-path-light.png" width="960">
+</picture>
 
 - [`src/hailo_inference.py`](src/hailo_inference.py) configures the HEF on a `VDevice` and
   opens the pipeline once at startup. After that, `run()` just pushes a frame. `activate()` has

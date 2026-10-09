@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>One frame, camera to display</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&family=Noto+Serif:ital@0;1&family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@400&family=Noto+Sans+TC:wght@400;500;600&family=Noto+Serif+TC:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:   #2d3142;   /* deep warm charcoal */
+      --color-ink:     #f5f5f5;   /* warm off-white */
+      --color-muted:   #bfc0c0;
+      --color-accent:  #f08a59;
+      --font-sans:     'Geist', system-ui, sans-serif;
+      --font-serif:    'Instrument Serif', 'Noto Serif', 'Noto Serif KR', serif;
+      --font-mono:     'Geist Mono', ui-monospace, monospace;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+
+    .frame { max-width: 1200px; width: 100%; }
+    /* The SVG holds its readable width (min-width == the viewBox width, so the
+       type ramp is never silently scaled down). This wrapper lets a narrow
+       screen scroll the diagram instead of the whole page. */
+    .diagram-container { width: 100%; overflow-x: auto; }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--color-ink);
+      margin-bottom: 1.5rem;
+    }
+
+    svg { width: 100%; min-width: 960px; display: block; }
+    /* Paper has no scrollbar, so the local scroller would clip instead of
+       scroll. Let the diagram scale down to the sheet: smaller but whole
+       beats sharp but cut off. Must come after the svg rule above - a media
+       query adds no specificity, so a later plain rule would win. */
+    @media print {
+      .diagram-container { overflow-x: visible; }
+      svg { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sequence · yolov8-hailo-pi5</p>
+    <h1>One frame, camera to display</h1>
+
+        <div class="diagram-container">
+      <svg viewBox="0 0 960 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="frame-path-dark-title frame-path-dark-desc">
+        <title id="frame-path-dark-title">One frame, camera to display</title>
+        <desc id="frame-path-dark-desc">Sequence of one frame through yolov8-hailo-pi5: the camera thread publishes to latest_frame, the inference thread runs the Hailo-8L at 6.91 ms mean and publishes to latest_result, and the main thread tracks, draws and displays.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bfc0c0"/></marker>
+          <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#f08a59"/></marker>
+          <marker id="arrow-open" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polyline points="0 0, 8 3, 0 6" fill="none" stroke="#bfc0c0" stroke-width="1.2"/></marker>
+        </defs>
+
+        <rect width="100%" height="100%" fill="#2d3142"/>
+
+        <line x1="112" y1="104" x2="112" y2="536" stroke="rgba(245,245,245,0.22)" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="296" y1="104" x2="296" y2="536" stroke="rgba(245,245,245,0.22)" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="480" y1="104" x2="480" y2="536" stroke="rgba(245,245,245,0.22)" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="664" y1="104" x2="664" y2="536" stroke="rgba(245,245,245,0.22)" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="848" y1="104" x2="848" y2="536" stroke="rgba(245,245,245,0.22)" stroke-width="1" stroke-dasharray="3,3"/>
+        <rect x="476" y="180" width="8" height="260" fill="rgba(245,245,245,0.06)" stroke="#bfc0c0" stroke-width="0.8"/>
+        <rect x="844" y="452" width="8" height="84" fill="rgba(245,245,245,0.06)" stroke="#bfc0c0" stroke-width="0.8"/>
+        <line x1="112" y1="148" x2="296" y2="148" stroke="#bfc0c0" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="476" y1="188" x2="296" y2="188" stroke="#bfc0c0" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="296" y1="220" x2="476" y2="220" stroke="#bfc0c0" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+        <line x1="484" y1="444" x2="664" y2="444" stroke="#bfc0c0" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="664" y1="472" x2="844" y2="472" stroke="#bfc0c0" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow-open)"/>
+        <path d="M 484 244 H 516 Q 524 244 524 252 V 268 Q 524 276 516 276 H 484" fill="none" stroke="#bfc0c0" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M 484 296 H 516 Q 524 296 524 304 V 344 Q 524 352 516 352 H 484" fill="none" stroke="#f08a59" stroke-width="1.6" marker-end="url(#arrow-accent)"/>
+        <path d="M 484 372 H 516 Q 524 372 524 380 V 396 Q 524 404 516 404 H 484" fill="none" stroke="#bfc0c0" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M 844 492 H 820 Q 812 492 812 500 V 524 Q 812 532 820 532 H 844" fill="none" stroke="#bfc0c0" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <rect x="162" y="128" width="84" height="12" rx="2" fill="#2d3142"/>
+        <text x="204" y="138" fill="#bfc0c0" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">PUBLISH FRAME</text>
+        <rect x="136" y="156" width="136" height="12" rx="2" fill="#2d3142"/>
+        <text x="204" y="166" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">15.0 FPS · USB webcam</text>
+        <rect x="350" y="168" width="72" height="12" rx="2" fill="#2d3142"/>
+        <text x="386" y="178" fill="#bfc0c0" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">POLL · LOCK</text>
+        <rect x="346" y="200" width="80" height="12" rx="2" fill="#2d3142"/>
+        <text x="386" y="210" fill="#bfc0c0" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NEW SEQ ONLY</text>
+        <rect x="528" y="424" width="92" height="12" rx="2" fill="#2d3142"/>
+        <text x="574" y="434" fill="#bfc0c0" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">PUBLISH RESULT</text>
+        <rect x="730" y="452" width="48" height="12" rx="2" fill="#2d3142"/>
+        <text x="754" y="462" fill="#bfc0c0" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NOTIFY</text>
+        <rect x="532" y="247" width="120" height="24" rx="2" fill="#2d3142"/>
+        <text x="536" y="256" fill="#bfc0c0" font-size="8" font-family="'Geist Mono', monospace" text-anchor="start" letter-spacing="0.08em">PREPROCESS</text>
+        <text x="536" y="268" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="start">resize 640×640 · RGB</text>
+        <rect x="532" y="299" width="120" height="48" rx="2" fill="#2d3142"/>
+        <text x="536" y="308" fill="#f08a59" font-size="8" font-family="'Geist Mono', monospace" text-anchor="start" letter-spacing="0.08em">HAILO-8L RUN()</text>
+        <text x="536" y="320" fill="#f08a59" font-size="9" font-family="'Geist Mono', monospace" text-anchor="start">6.91 ms mean</text>
+        <text x="536" y="332" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="start">p95 7.31 ms</text>
+        <text x="536" y="344" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="start">144.74 FPS synthetic</text>
+        <rect x="532" y="375" width="92" height="24" rx="2" fill="#2d3142"/>
+        <text x="536" y="384" fill="#bfc0c0" font-size="8" font-family="'Geist Mono', monospace" text-anchor="start" letter-spacing="0.08em">DECODE</text>
+        <text x="536" y="396" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="start">decode_yolov8()</text>
+        <rect x="672" y="495" width="132" height="36" rx="2" fill="#2d3142"/>
+        <text x="800" y="504" fill="#bfc0c0" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.08em">TRACK + DRAW</text>
+        <text x="800" y="516" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">update_with_detections</text>
+        <text x="800" y="528" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">imshow · record</text>
+        <rect x="40" y="48" width="144" height="56" rx="6" fill="#2d3142"/>
+        <rect x="40" y="48" width="144" height="56" rx="6" fill="rgba(191,192,192,0.10)" stroke="#8e98ac" stroke-width="1"/>
+        <rect x="48" y="56" width="28" height="12" rx="2" fill="none" stroke="rgba(142,152,172,0.40)" stroke-width="0.8"/>
+        <text x="62" y="65" fill="#8e98ac" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CAM</text>
+        <text x="112" y="80" fill="#f5f5f5" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Camera thread</text>
+        <text x="112" y="95" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">usb_camera_thread</text>
+        <rect x="224" y="48" width="144" height="56" rx="6" fill="#2d3142"/>
+        <rect x="224" y="48" width="144" height="56" rx="6" fill="rgba(245,245,245,0.05)" stroke="#bfc0c0" stroke-width="1"/>
+        <rect x="232" y="56" width="32" height="12" rx="2" fill="none" stroke="rgba(245,245,245,0.22)" stroke-width="0.8"/>
+        <text x="248" y="65" fill="#8e98ac" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SLOT</text>
+        <text x="296" y="80" fill="#f5f5f5" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">latest_frame</text>
+        <text x="296" y="95" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">frame_lock</text>
+        <rect x="408" y="48" width="144" height="56" rx="6" fill="#2d3142"/>
+        <rect x="408" y="48" width="144" height="56" rx="6" fill="rgba(240,138,89,0.08)" stroke="#f08a59" stroke-width="1"/>
+        <rect x="416" y="56" width="28" height="12" rx="2" fill="none" stroke="rgba(240,138,89,0.50)" stroke-width="0.8"/>
+        <text x="430" y="65" fill="#f08a59" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NPU</text>
+        <text x="480" y="80" fill="#f5f5f5" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Inference thread</text>
+        <text x="480" y="95" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">HailoInference</text>
+        <rect x="592" y="48" width="144" height="56" rx="6" fill="#2d3142"/>
+        <rect x="592" y="48" width="144" height="56" rx="6" fill="rgba(245,245,245,0.05)" stroke="#bfc0c0" stroke-width="1"/>
+        <rect x="600" y="56" width="32" height="12" rx="2" fill="none" stroke="rgba(245,245,245,0.22)" stroke-width="0.8"/>
+        <text x="616" y="65" fill="#8e98ac" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SLOT</text>
+        <text x="664" y="80" fill="#f5f5f5" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">latest_result</text>
+        <text x="664" y="95" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">result_cv</text>
+        <rect x="776" y="48" width="144" height="56" rx="6" fill="#2d3142"/>
+        <rect x="776" y="48" width="144" height="56" rx="6" fill="rgba(245,245,245,0.06)" stroke="#f5f5f5" stroke-width="1"/>
+        <rect x="784" y="56" width="32" height="12" rx="2" fill="none" stroke="rgba(245,245,245,0.22)" stroke-width="0.8"/>
+        <text x="800" y="65" fill="#8e98ac" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MAIN</text>
+        <text x="848" y="80" fill="#f5f5f5" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Main thread</text>
+        <text x="848" y="95" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ByteTrack · draw</text>
+        <line x1="40" y1="548" x2="920" y2="548" stroke="rgba(245,245,245,0.10)" stroke-width="0.8"/>
+        <text x="40" y="562" fill="#bfc0c0" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.18em">LEGEND</text>
+        <rect x="40" y="574" width="14" height="10" rx="2" fill="rgba(240,138,89,0.08)" stroke="#f08a59" stroke-width="1"/>
+        <text x="60" y="582" fill="#bfc0c0" font-size="8.5" font-family="'Geist', sans-serif">NPU inference hop</text>
+        <rect x="188" y="574" width="14" height="10" rx="2" fill="rgba(245,245,245,0.05)" stroke="#bfc0c0" stroke-width="1"/>
+        <text x="208" y="582" fill="#bfc0c0" font-size="8.5" font-family="'Geist', sans-serif">Shared slot</text>
+        <rect x="304" y="570" width="4" height="18" fill="rgba(245,245,245,0.06)" stroke="#bfc0c0" stroke-width="0.8"/>
+        <text x="316" y="582" fill="#bfc0c0" font-size="8.5" font-family="'Geist', sans-serif">Activation</text>
+        <line x1="404" y1="579" x2="432" y2="579" stroke="#bfc0c0" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <text x="440" y="582" fill="#bfc0c0" font-size="8.5" font-family="'Geist', sans-serif">Call</text>
+        <line x1="496" y1="579" x2="524" y2="579" stroke="#bfc0c0" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+        <text x="532" y="582" fill="#bfc0c0" font-size="8.5" font-family="'Geist', sans-serif">Return</text>
+        <line x1="600" y1="579" x2="628" y2="579" stroke="#bfc0c0" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow-open)"/>
+        <text x="636" y="582" fill="#bfc0c0" font-size="8.5" font-family="'Geist', sans-serif">Notify (async)</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>
